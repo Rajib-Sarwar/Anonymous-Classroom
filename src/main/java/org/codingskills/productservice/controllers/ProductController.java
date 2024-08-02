@@ -1,6 +1,7 @@
 package org.codingskills.productservice.controllers;
 
 import org.codingskills.productservice.models.Product;
+import org.codingskills.productservice.services.ProductService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -9,16 +10,23 @@ import java.util.List;
 @RestController
 @RequestMapping("/products")
 public class ProductController {
+
+    private final ProductService productService;
+
+    ProductController(ProductService productService) {
+        this.productService = productService;
+    }
+
     //localhost:8080/products/10
     @GetMapping("/{id}")
     public Product getProductById(@PathVariable("id") Long id) {
-        return new Product();
+        return productService.getProductById(id);
     }
 
     //localhost:8080/products
     @GetMapping()
     public List<Product> getAllProducts() {
-        return new ArrayList<>();
+        return productService.getAllProducts();
     }
 
     @PostMapping()
@@ -40,6 +48,6 @@ public class ProductController {
 
     @DeleteMapping("/{id}")
     public String deleteProduct(@PathVariable("id") Long id) {
-        return new String();
+        return "Deleted Successfully";
     }
 }
