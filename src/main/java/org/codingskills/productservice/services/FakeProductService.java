@@ -49,20 +49,10 @@ public class FakeProductService implements ProductService {
     @Override
     public List<Product> getAllProducts() {
 
-        ObjectMapper objectMapper = new ObjectMapper();
-        List<FakeStoreProductDto> fakeStoreProductDtos;
+        FakeStoreProductDto[] fakeStoreProductDtos = restTemplate.getForObject("https://fakestoreapi.com/products", FakeStoreProductDto[].class);
 
-        try {
-            String json = restTemplate.getForObject("https://fakestoreapi.com/products", String.class);
-            fakeStoreProductDtos = objectMapper.readValue(json, new TypeReference<List<FakeStoreProductDto>>() {
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-
-        if (fakeStoreProductDtos == null) { return null; }
         List<Product> products = new ArrayList<>();
+        assert fakeStoreProductDtos != null;
         for (FakeStoreProductDto fakeStoreProductDto : fakeStoreProductDtos) {
             products.add(convertFakeStorewDtoToProduct(fakeStoreProductDto));
         }
